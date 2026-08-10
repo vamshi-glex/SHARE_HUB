@@ -1,0 +1,56 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #0d0d0d;
+    color: white;
+}
+
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+}
+
+h1 {
+    font-size: 48px;
+}
+
+p {
+    color: #aaaaaa;
+}
+
+.card {
+    display: flex;
+    gap: 10px;
+}
+
+input {
+    padding: 14px;
+    width: 280px;
+    border: 1px solid #333;
+    border-radius: 8px;
+    background: #171717;
+    color: white;
+}
+
+button {
+    padding: 14px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background: #e63946;
+    color: white;
+    font-weight: bold;
+}
+
+button:hover {
+    opacity: 0.9;
+}
