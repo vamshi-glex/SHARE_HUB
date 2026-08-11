@@ -54,3 +54,30 @@ button {
 button:hover {
     opacity: 0.9;
 }
+
+.editor {
+    width: 90%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+textarea {
+    width: 100%;
+    min-height: 400px;
+    padding: 20px;
+
+    background: #171717;
+    color: white;
+
+    border: 1px solid #333;
+    border-radius: 10px;
+
+    resize: vertical;
+    font-size: 16px;
+}
+
+.editor button {
+    width: 120px;
+}

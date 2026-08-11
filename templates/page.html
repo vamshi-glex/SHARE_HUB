@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>{{ page.name }} — CloneCat</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <main class="container">
+
+        <h1>CloneCat</h1>
+
+        <h2>{{ page.name }}</h2>
+
+        <div class="editor">
+
+            <textarea
+                id="pageText"
+                placeholder="Write something...">{{ page.text }}</textarea>
+
+            <button onclick="saveText()">
+                Save
+            </button>
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>
