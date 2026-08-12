@@ -13,3 +13,11 @@ def create_page(name):
     db.session.commit()
 
     return page
+
+
+def update_page_text(page, text):
+    page.text = text
+
+    db.session.commit()
+
+    return page

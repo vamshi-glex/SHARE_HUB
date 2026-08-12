@@ -4,13 +4,17 @@
 <head>
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>{{ page.name }} — CloneCat</title>
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
 </head>
 
 <body>
@@ -25,15 +29,74 @@
 
             <textarea
                 id="pageText"
-                placeholder="Write something...">{{ page.text }}</textarea>
+                placeholder="Write something..."
+            >{{ page.text }}</textarea>
 
-            <button onclick="saveText()">
+            <button id="saveButton" onclick="saveText()">
                 Save
             </button>
+
+            <p id="status"></p>
 
         </div>
 
     </main>
+
+    <script>
+        async function saveText() {
+
+            const text =
+                document.getElementById("pageText").value;
+
+            const status =
+                document.getElementById("status");
+
+            const button =
+                document.getElementById("saveButton");
+
+            button.disabled = true;
+            status.textContent = "Saving...";
+
+            try {
+
+                const response = await fetch(
+                    "/api/pages/{{ page.name }}",
+                    {
+                        method: "PATCH",
+
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            text: text
+                        })
+                    }
+                );
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    status.textContent = data.error;
+                    return;
+                }
+
+                status.textContent =
+                    "Saved successfully!";
+
+            } catch (error) {
+
+                status.textContent =
+                    "Something went wrong.";
+
+                console.error(error);
+
+            } finally {
+
+                button.disabled = false;
+            }
+        }
+    </script>
 
 </body>
 
