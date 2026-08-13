@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Manage {{ page.name }} — CloneCat</title>
+
+</head>
+
+<body>
+
+    <main class="container">
+
+        <h1>CloneCat Manager</h1>
+
+        <h2>{{ page.name }}</h2>
+
+        {% if page.edit_locked %}
+
+            <p>🔒 Page is currently read-only.</p>
+
+            <button onclick="toggleLock(false)">
+                🔓 Unlock Editing
+            </button>
+
+        {% else %}
+
+            <p>🔓 Page is currently editable.</p>
+
+            <button onclick="toggleLock(true)">
+                🔒 Lock Editing
+            </button>
+
+        {% endif %}
+
+        <p id="status"></p>
+
+    </main>
+
+
+    <script>
+
+        async function toggleLock(lock) {
+
+            const status =
+                document.getElementById("status");
+
+            status.textContent =
+                "Updating...";
+
+            try {
+
+                const response = await fetch(
+                    "/api/pages/{{ page.name }}/lock",
+                    {
+                        method: "PATCH",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        credentials: "same-origin",
+
+                        body: JSON.stringify({
+                            edit_locked: lock
+                        })
+                    }
+                );
+
+                const data =
+                    await response.json();
+
+                if (!response.ok) {
+
+                    status.textContent =
+                        data.error;
+
+                    return;
+                }
+
+                status.textContent =
+                    "Updated successfully.";
+
+                setTimeout(() => {
+                    window.location.reload();
+                }, 500);
+
+            } catch (error) {
+
+                console.error(error);
+
+                status.textContent =
+                    "Something went wrong.";
+            }
+        }
+
+    </script>
+
+</body>
+
+</html>
