@@ -25,24 +25,67 @@
 
         <h2>{{ page.name }}</h2>
 
+        {% if page.edit_locked %}
+            <p class="lock-status">
+                🔒 This page is read-only
+            </p>
+        {% else %}
+            <p class="lock-status">
+                ✏️ Anyone can edit this page
+            </p>
+        {% endif %}
+
         <div class="editor">
 
             <textarea
                 id="pageText"
                 placeholder="Write something..."
+                {% if page.edit_locked %}readonly{% endif %}
             >{{ page.text }}</textarea>
 
-            <button id="saveButton" onclick="saveText()">
-                Save
-            </button>
+            {% if not page.edit_locked %}
+
+                <button
+                    id="saveButton"
+                    onclick="saveText()"
+                >
+                    Save
+                </button>
+
+            {% endif %}
 
             <p id="status"></p>
 
         </div>
 
+        <div class="controls">
+
+            {% if page.edit_locked %}
+        
+                <button
+                    id="lockButton"
+                    onclick="toggleEditLock(false)"
+                >
+                    🔓 Unlock Editing
+                </button>
+        
+            {% else %}
+        
+                <button
+                    id="lockButton"
+                    onclick="toggleEditLock(true)"
+                >
+                    🔒 Lock Editing
+                </button>
+        
+            {% endif %}
+        
+        </div>
+
     </main>
 
     <script>
+
         async function saveText() {
 
             const text =
@@ -55,6 +98,7 @@
                 document.getElementById("saveButton");
 
             button.disabled = true;
+
             status.textContent = "Saving...";
 
             try {
@@ -96,6 +140,63 @@
                 button.disabled = false;
             }
         }
+
+        async function toggleEditLock(lock) {
+
+const status =
+    document.getElementById("status");
+
+const button =
+    document.getElementById("lockButton");
+
+button.disabled = true;
+
+status.textContent = "Updating...";
+
+try {
+
+    const response = await fetch(
+        "/api/pages/{{ page.name }}/lock",
+        {
+            method: "PATCH",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                edit_locked: lock
+            })
+        }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        status.textContent = data.error;
+        return;
+    }
+
+    status.textContent =
+        "Lock status updated.";
+
+    setTimeout(() => {
+        window.location.reload();
+    }, 500);
+
+} catch (error) {
+
+    status.textContent =
+        "Something went wrong.";
+
+    console.error(error);
+
+} finally {
+
+    button.disabled = false;
+}
+}
+
     </script>
 
 </body>
