@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
 
     <meta
@@ -10,13 +9,12 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Manage {{ page.name }} — CloneCat</title>
-
+    <title>Manage {{ page.name }} - CloneCat</title>
 </head>
 
 <body>
 
-    <main class="container">
+    <main>
 
         <h1>CloneCat Manager</h1>
 
@@ -24,7 +22,7 @@
 
         {% if page.edit_locked %}
 
-            <p>🔒 Page is currently read-only.</p>
+            <p>🔒 Page is currently locked.</p>
 
             <button onclick="toggleLock(false)">
                 🔓 Unlock Editing
@@ -32,7 +30,7 @@
 
         {% else %}
 
-            <p>🔓 Page is currently editable.</p>
+            <p>🔓 Page is currently unlocked.</p>
 
             <button onclick="toggleLock(true)">
                 🔒 Lock Editing
@@ -52,8 +50,7 @@
             const status =
                 document.getElementById("status");
 
-            status.textContent =
-                "Updating...";
+            status.textContent = "Updating...";
 
             try {
 
@@ -75,31 +72,67 @@
                     }
                 );
 
-                const data =
-                    await response.json();
 
-                if (!response.ok) {
+                const contentType =
+                    response.headers.get(
+                        "content-type"
+                    );
+
+
+                if (!contentType ||
+                    !contentType.includes("application/json")) {
+
+                    const text =
+                        await response.text();
+
+                    console.error(
+                        "Server response:",
+                        text
+                    );
 
                     status.textContent =
-                        data.error;
+                        "Server returned an unexpected response.";
 
                     return;
                 }
 
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    status.textContent =
+                        data.error || "Request failed.";
+
+                    return;
+                }
+
+
                 status.textContent =
-                    "Updated successfully.";
+                    "Updated successfully!";
+
 
                 setTimeout(() => {
+
                     window.location.reload();
+
                 }, 500);
+
 
             } catch (error) {
 
-                console.error(error);
+                console.error(
+                    "Lock error:",
+                    error
+                );
 
                 status.textContent =
                     "Something went wrong.";
+
             }
+
         }
 
     </script>
