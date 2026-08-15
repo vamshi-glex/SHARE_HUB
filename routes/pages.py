@@ -5,6 +5,7 @@ from flask import (
     jsonify,
     make_response
 )
+
 import re
 
 from extensions import db
@@ -27,9 +28,7 @@ pages_bp = Blueprint("pages", __name__)
 @pages_bp.route("/")
 def home():
 
-    return render_template(
-        "index.html"
-    )
+    return render_template("index.html")
 
 
 # -------------------------
@@ -40,17 +39,18 @@ def home():
 def open_page(name):
 
     if not re.fullmatch(
-        r"[A-Za-z0-9_-]{1,50}",
-        name
-    ):
-        return jsonify({
-            "error": "Invalid page name"
-        }), 400
+    r"[A-Za-z0-9_-]{1,50}",
+    name
+):
+     return render_template(
+        "invalid_page.html",
+        message="Invalid page name"
+    ), 400
 
     page = get_page_by_name(name)
 
-    # If the page has expired, delete it
-    # and allow the same name to create a new page.
+    # Expired page → delete it
+    # Same name can then create a new page.
     if page is not None and is_page_expired(page):
 
         db.session.delete(page)
@@ -112,7 +112,6 @@ def update_page(name):
     page = get_page_by_name(name)
 
     if page is None:
-
         return jsonify({
             "error": "Page not found"
         }), 404
@@ -120,40 +119,17 @@ def update_page(name):
     data = request.get_json()
 
     if not data:
-
         return jsonify({
             "error": "Request body is required"
         }), 400
 
     text = data.get("text")
 
-    if not isinstance(text, str):
-
-      return jsonify({
-        "error": "Text must be a string"
-    }), 400
-
-
-    if len(text) > 100_000:
-
-      return jsonify({
-        "error": "Text is too long. Maximum is 100,000 characters."
-    }), 400
-
-
-
-
-
-
-    
-
     if text is None:
-
         return jsonify({
             "error": "Text is required"
         }), 400
 
-    # Check owner cookie
     owner_secret = request.cookies.get(
         "clonecat_owner"
     )
@@ -163,11 +139,10 @@ def update_page(name):
         owner_secret
     )
 
-    # Locked page → only owner can edit
+    # Locked → only owner can edit
     if page.edit_locked and not owner:
-
         return jsonify({
-            "error": "Page is locked. Only the owner can edit."
+            "error": "Page is locked"
         }), 403
 
     page.text = text
@@ -176,13 +151,36 @@ def update_page(name):
 
     return jsonify({
         "message": "Page updated successfully",
-
         "page": {
             "name": page.name,
             "text": page.text,
             "edit_locked": page.edit_locked
         }
     }), 200
+
+
+# -------------------------
+# ABOUT
+# -------------------------
+
+@pages_bp.route("/about")
+def about():
+
+    return render_template(
+        "about.html"
+    )
+
+
+# -------------------------
+# FEATURES
+# -------------------------
+
+@pages_bp.route("/features")
+def features():
+
+    return render_template(
+        "features.html"
+    )
 
 
 # -------------------------
@@ -197,7 +195,6 @@ def manage_page(name):
     page = get_page_by_name(name)
 
     if page is None:
-
         return "Page not found", 404
 
     owner_secret = request.cookies.get(
@@ -208,7 +205,6 @@ def manage_page(name):
         page,
         owner_secret
     ):
-
         return "Owner access required", 403
 
     return render_template(
@@ -230,22 +226,18 @@ def update_edit_lock(name):
     page = get_page_by_name(name)
 
     if page is None:
-
         return jsonify({
             "error": "Page not found"
         }), 404
 
-    # Get owner cookie
     owner_secret = request.cookies.get(
         "clonecat_owner"
     )
 
-    # Verify ownership
     if not is_owner(
         page,
         owner_secret
     ):
-
         return jsonify({
             "error": "Owner access required"
         }), 403
@@ -253,13 +245,11 @@ def update_edit_lock(name):
     data = request.get_json()
 
     if not data:
-
         return jsonify({
             "error": "Request body is required"
         }), 400
 
     if "edit_locked" not in data:
-
         return jsonify({
             "error": "edit_locked is required"
         }), 400
@@ -270,7 +260,6 @@ def update_edit_lock(name):
         edit_locked,
         bool
     ):
-
         return jsonify({
             "error": "edit_locked must be true or false"
         }), 400
@@ -280,10 +269,6 @@ def update_edit_lock(name):
     db.session.commit()
 
     return jsonify({
-
         "message": "Edit lock updated",
-
-        "edit_locked":
-            page.edit_locked
-
+        "edit_locked": page.edit_locked
     }), 200

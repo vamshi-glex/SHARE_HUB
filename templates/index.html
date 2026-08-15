@@ -5,34 +5,145 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>CloneCat</title>
+    <title>CloneCat — Share Text. No Account.</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
 </head>
 
 <body>
 
-    <main class="container">
+    <main class="landing">
 
-        <h1>CloneCat</h1>
+        <!-- Navigation -->
+        <nav class="navbar">
 
-        <p>Share text instantly using a simple page name.</p>
+            <a href="/" class="brand">
+                <span class="brand-icon">🐱</span>
+                <span>CloneCat</span>
+            </a>
 
-        <div class="card">
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/about">About</a>
+                <a href="/features">Features</a>
+            </div>
 
-            <input
-                type="text"
-                id="pageName"
-                placeholder="Enter page name"
-            >
+        </nav>
 
-            <button onclick="openPage()">
-                Open Page
-            </button>
 
-        </div>
+        <!-- Hero -->
+        <section class="hero">
+
+            <div class="hero-badge">
+                SIMPLE · FAST · NO ACCOUNT
+            </div>
+
+            <h1>
+                Share text.<br>
+                <span>No account.</span>
+            </h1>
+
+            <p class="hero-description">
+                Create a page, write anything you want,
+                and share the link with anyone.
+            </p>
+
+
+            <!-- Create / Open Page -->
+            <div class="create-card">
+
+                <label for="pageName">
+                    Create or open a page
+                </label>
+
+                <div class="page-input-group">
+
+                    <span class="url-prefix">/</span>
+
+                    <input
+                        type="text"
+                        id="pageName"
+                        placeholder="page-name"
+                        autocomplete="off"
+                        maxlength="50"
+                        onkeydown="if(event.key === 'Enter') openPage()"
+                    >
+
+                    <button
+                        onclick="openPage()"
+                        class="primary-button"
+                    >
+                        Open Page
+                        <span>→</span>
+                    </button>
+
+                </div>
+
+                <p class="input-hint">
+                    Use letters, numbers, hyphens or underscores.
+                </p>
+
+                <p class="expiry-info">
+                    <span class="expiry-icon">⏱</span>
+                    Available for 7 days
+                </p>
+
+            </div>
+
+
+            <!-- Features -->
+            <div class="feature-row">
+
+                <div class="feature">
+
+                    <span>⚡</span>
+
+                    <div>
+                        <strong>Instant</strong>
+                        <small>No setup required</small>
+                    </div>
+
+                </div>
+
+
+                <div class="feature">
+
+                    <span>🔗</span>
+
+                    <div>
+                        <strong>Shareable</strong>
+                        <small>One simple URL</small>
+                    </div>
+
+                </div>
+
+
+                <div class="feature">
+
+                    <span>🔒</span>
+
+                    <div>
+                        <strong>Optional lock</strong>
+                        <small>Control editing</small>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Footer -->
+        <footer class="landing-footer">
+            CloneCat · Share text without the hassle.
+        </footer>
 
     </main>
+
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 

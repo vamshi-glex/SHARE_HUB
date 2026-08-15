@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -9,36 +10,201 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Manage {{ page.name }} - CloneCat</title>
+    <title>Manage {{ page.name }} — CloneCat</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
 </head>
+
 
 <body>
 
-    <main>
+    <main class="manage-shell">
 
-        <h1>CloneCat Manager</h1>
 
-        <h2>{{ page.name }}</h2>
+        <nav class="navbar">
 
-        {% if page.edit_locked %}
+            <a href="/" class="brand brand-link">
 
-            <p>🔒 Page is currently locked.</p>
+                <span class="brand-icon">🐱</span>
 
-            <button onclick="toggleLock(false)">
-                🔓 Unlock Editing
-            </button>
+                <span>CloneCat</span>
 
-        {% else %}
+            </a>
 
-            <p>🔓 Page is currently unlocked.</p>
+            <a
+                href="/{{ page.name }}"
+                class="back-link"
+            >
+                ← Back to page
+            </a>
 
-            <button onclick="toggleLock(true)">
-                🔒 Lock Editing
-            </button>
+        </nav>
 
-        {% endif %}
 
-        <p id="status"></p>
+        <section class="manage-content">
+
+
+            <div class="manage-heading">
+
+                <span class="manage-eyebrow">
+                    OWNER SETTINGS
+                </span>
+
+                <h1>
+                    Manage
+                    <span>/{{ page.name }}</span>
+                </h1>
+
+                <p>
+                    Control who can edit your CloneCat page.
+                </p>
+
+            </div>
+
+
+            <!-- STATUS CARD -->
+
+            <div class="settings-card">
+
+
+                <div class="setting-row">
+
+                    <div class="setting-icon">
+                        {% if page.edit_locked %}
+                            🔒
+                        {% else %}
+                            ✏️
+                        {% endif %}
+                    </div>
+
+
+                    <div class="setting-info">
+
+                        <h2>Editing access</h2>
+
+                        {% if page.edit_locked %}
+
+                            <p class="setting-status locked-text">
+                                Editing is locked
+                            </p>
+
+                            <p class="setting-description">
+                                Visitors can read and copy the
+                                text, but cannot modify it.
+                            </p>
+
+                        {% else %}
+
+                            <p class="setting-status unlocked-text">
+                                Editing is enabled
+                            </p>
+
+                            <p class="setting-description">
+                                Anyone with the page link can
+                                edit the text.
+                            </p>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div>
+
+                        {% if page.edit_locked %}
+
+                            <button
+                                id="lockButton"
+                                onclick="toggleLock(false)"
+                                class="primary-button"
+                            >
+                                🔓 Unlock editing
+                            </button>
+
+                        {% else %}
+
+                            <button
+                                id="lockButton"
+                                onclick="toggleLock(true)"
+                                class="danger-button"
+                            >
+                                🔒 Lock editing
+                            </button>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="status"
+                    class="manage-status"
+                ></div>
+
+            </div>
+
+
+            <!-- SHARE CARD -->
+
+            <div class="settings-card">
+
+
+                <div class="share-heading">
+
+                    <div class="setting-icon">
+                        🔗
+                    </div>
+
+                    <div>
+
+                        <h2>Page link</h2>
+
+                        <p>
+                            Share this link with anyone.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="share-url">
+
+                    <span>
+                        /{{ page.name }}
+                    </span>
+
+                    <button
+                        onclick="copyPageLink()"
+                        class="secondary-button"
+                    >
+                        📋 Copy link
+                    </button>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+        <footer class="page-footer">
+
+            <span>CloneCat</span>
+
+            <span>
+                Share text. No account.
+            </span>
+
+        </footer>
+
 
     </main>
 
@@ -50,7 +216,17 @@
             const status =
                 document.getElementById("status");
 
-            status.textContent = "Updating...";
+            const button =
+                document.getElementById("lockButton");
+
+
+            button.disabled = true;
+
+            button.textContent =
+                lock
+                    ? "Locking..."
+                    : "Unlocking...";
+
 
             try {
 
@@ -73,30 +249,6 @@
                 );
 
 
-                const contentType =
-                    response.headers.get(
-                        "content-type"
-                    );
-
-
-                if (!contentType ||
-                    !contentType.includes("application/json")) {
-
-                    const text =
-                        await response.text();
-
-                    console.error(
-                        "Server response:",
-                        text
-                    );
-
-                    status.textContent =
-                        "Server returned an unexpected response.";
-
-                    return;
-                }
-
-
                 const data =
                     await response.json();
 
@@ -104,14 +256,15 @@
                 if (!response.ok) {
 
                     status.textContent =
-                        data.error || "Request failed.";
+                        data.error ||
+                        "Request failed.";
 
                     return;
                 }
 
 
                 status.textContent =
-                    "Updated successfully!";
+                    "✓ Updated successfully";
 
 
                 setTimeout(() => {
@@ -131,8 +284,32 @@
                 status.textContent =
                     "Something went wrong.";
 
-            }
 
+            } finally {
+
+                button.disabled = false;
+            }
+        }
+
+
+        async function copyPageLink() {
+
+            const url =
+                window.location.origin +
+                "/{{ page.name }}";
+
+            try {
+
+                await navigator.clipboard.writeText(url);
+
+            } catch (error) {
+
+                console.error(
+                    "Copy link failed:",
+                    error
+                );
+
+            }
         }
 
     </script>
