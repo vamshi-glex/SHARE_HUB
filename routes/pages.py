@@ -5,6 +5,7 @@ from flask import (
     jsonify,
     make_response
 )
+import re
 
 from extensions import db
 
@@ -37,6 +38,14 @@ def home():
 
 @pages_bp.route("/<string:name>")
 def open_page(name):
+
+    if not re.fullmatch(
+        r"[A-Za-z0-9_-]{1,50}",
+        name
+    ):
+        return jsonify({
+            "error": "Invalid page name"
+        }), 400
 
     page = get_page_by_name(name)
 
@@ -117,6 +126,26 @@ def update_page(name):
         }), 400
 
     text = data.get("text")
+
+    if not isinstance(text, str):
+
+      return jsonify({
+        "error": "Text must be a string"
+    }), 400
+
+
+    if len(text) > 100_000:
+
+      return jsonify({
+        "error": "Text is too long. Maximum is 100,000 characters."
+    }), 400
+
+
+
+
+
+
+    
 
     if text is None:
 
