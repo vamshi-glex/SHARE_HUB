@@ -54,7 +54,10 @@ def is_owner(page, owner_secret):
         owner_secret
     )
 
-    return secret_hash == page.owner_token_hash
+    return secrets.compare_digest(
+        secret_hash,
+        page.owner_token_hash
+    )
 
 
 def update_page_text(page, text):
