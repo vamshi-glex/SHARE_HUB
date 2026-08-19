@@ -30,7 +30,7 @@ def create_page(name):
 
     expires_at = (
         datetime.utcnow()
-        + timedelta(days=7)
+        + timedelta(days=2)
     )
 
     page = Page(
