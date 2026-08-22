@@ -21,8 +21,15 @@
         <nav class="navbar">
 
             <a href="/" class="brand">
-                <span class="brand-icon">🐱</span>
-                <span>CloneCat</span>
+                <img
+    src="{{ url_for('static', filename='images/clonecat_logo.png') }}"
+    alt="CloneCat"
+    class="brand-logo-icon"
+>
+            
+                <span class="brand-name">
+                    <span class="brand-clone">Clone</span><span class="brand-cat">Cat</span>
+                </span>
             </a>
 
             <div class="nav-links">
@@ -76,7 +83,7 @@
                         onclick="openPage()"
                         class="primary-button"
                     >
-                        Open Page
+                        Create
                         <span>→</span>
                     </button>
 
@@ -90,47 +97,6 @@
                     <span class="expiry-icon">⏱</span>
                     Available for 2 days
                 </p>
-
-            </div>
-
-
-            <!-- Features -->
-            <div class="feature-row">
-
-                <div class="feature">
-
-                    <span>⚡</span>
-
-                    <div>
-                        <strong>Instant</strong>
-                        <small>No setup required</small>
-                    </div>
-
-                </div>
-
-
-                <div class="feature">
-
-                    <span>🔗</span>
-
-                    <div>
-                        <strong>Shareable</strong>
-                        <small>One simple URL</small>
-                    </div>
-
-                </div>
-
-
-                <div class="feature">
-
-                    <span>🔒</span>
-
-                    <div>
-                        <strong>Optional lock</strong>
-                        <small>Control editing</small>
-                    </div>
-
-                </div>
 
             </div>
 

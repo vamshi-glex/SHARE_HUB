@@ -11,146 +11,209 @@
 
     <title>{{ page.name }} — CloneCat</title>
 
+    <!-- Main CSS -->
     <link
         rel="stylesheet"
         href="{{ url_for('static', filename='style.css') }}"
     >
+
+    <!-- Flaticon Regular Rounded -->
+    <link
+        rel="stylesheet"
+        href="https://cdn-uicons.flaticon.com/3.0.0/uicons-regular-rounded/css/uicons-regular-rounded.css"
+    >
+
+    <!-- Flaticon Solid Rounded -->
+    <link
+        rel="stylesheet"
+        href="https://cdn-uicons.flaticon.com/3.0.0/uicons-solid-rounded/css/uicons-solid-rounded.css"
+    >
 </head>
+
 
 <body>
 
-    <main class="page-shell">
+<main class="page-shell">
 
-        <!-- HEADER -->
 
-        <nav class="navbar page-navbar">
+    <!-- ========================================
+         NAVBAR
+    ========================================= -->
+
+    <nav class="navbar page-navbar">
+
+        <a href="/" class="brand brand-link">
 
             <a href="/" class="brand brand-link">
-                <span class="brand-icon">🐱</span>
-                <span>CloneCat</span>
+
+                <img
+                    src="{{ url_for('static', filename='images/clonecat_logo.png') }}"
+                    alt="CloneCat"
+                    class="brand-logo-icon"
+                >
+            
+                <span class="brand-name">
+                    <span class="brand-clone">Clone</span><span class="brand-cat">Cat</span><span class="page-path">/{{ page.name }}</span>
+                </span>
+            
             </a>
 
-            <div class="page-url">
-               <h2> /{{ page.name }}</h2>
-            </div>
+            <!-- <span class="brand-name">
+                <span class="brand-clone">Clone</span><span class="brand-cat">Cat</span><span class="page-path">/{{ page.name }}</span>
+            </span> -->
 
-        </nav>
+        </a>
+
+    </nav>
 
 
-        <!-- PAGE HEADER -->
+    <!-- ========================================
+         PAGE HEADER
+    ========================================= -->
 
-        <section class="page-header">
+    <section class="page-header">
 
-            <div>
+        <div>
 
-                <div class="page-title-row">
+            <div class="page-title-row">
 
-                    <h1>{{ page.name }}</h1>
+                <h1>{{ page.name }}</h1>
 
-                    {% if page.edit_locked %}
-                        <span class="status-badge locked">
-                            🔒 Locked
-                        </span>
-                    {% else %}
-                        <span class="status-badge unlocked">
-                            ● Editing enabled
-                        </span>
-                    {% endif %}
+                {% if page.edit_locked %}
 
-                </div>
-
-                {% if is_owner %}
-
-                    <p class="owner-label">
-                        You are the owner of this page.
-                    </p>
+                    <span class="status-badge locked">
+                        🔒 Locked
+                    </span>
 
                 {% else %}
 
-                    <p class="page-description">
-                        Anyone with this link can view this page.
-                    </p>
-
-                {% endif %}
-
-            </div>
-
-
-            <!-- COPY BUTTON -->
-
-            <button
-                class="secondary-button copy-button"
-                onclick="copyPageText()"
-                id="copyButton"
-            >
-                <span id="copyIcon">📋</span>
-                <span id="copyLabel">Copy</span>
-            </button>
-
-        </section>
-
-
-        <!-- EDITOR -->
-
-        <section class="editor-card">
-
-            <div class="editor-toolbar">
-
-                <span class="editor-label">
-                   <h2>TEXT</h2>  
-                </span>
-
-                <span class="character-count" id="characterCount">
-                    0 characters
-                </span>
-
-            </div>
-
-
-            <textarea
-                id="pageText"
-                placeholder="Write something..."
-                maxlength="100000"
-                oninput="updateCharacterCount()"
-                {% if page.edit_locked and not is_owner %}
-                    readonly
-                {% endif %}
-            >{{ page.text }}</textarea>
-
-
-            <div class="editor-footer">
-
-                <div id="status" class="status-message"></div>
-
-
-                {% if not page.edit_locked or is_owner %}
-
-                    <button
-                        id="saveButton"
-                        onclick="saveText()"
-                        class="primary-button save-button"
-                    >
-                        Save changes
-                    </button>
-
-                {% else %}
-
-                    <span class="readonly-message">
-                        🔒 Editing is locked by the owner
+                    <span class="status-badge unlocked">
+                        ● Editing enabled
                     </span>
 
                 {% endif %}
 
             </div>
 
-        </section>
+
+            {% if is_owner %}
+
+                <p class="owner-label">
+                    You are the owner of this page.
+                </p>
+
+            {% else %}
+
+                <p class="page-description">
+                    Anyone with this link can view this page.
+                </p>
+
+            {% endif %}
+
+        </div>
 
 
-        <!-- OWNER CONTROLS -->
+        <!-- COPY BUTTON -->
 
-        {% if is_owner %}
+        <button
+            id="copyButton"
+            class="copy-button"
+            onclick="copyPageText()"
+        >
+
+            <i
+                id="copyIcon"
+                class="fi fi-rr-copy-alt"
+            ></i>
+
+            <span id="copyLabel">
+                Copy
+            </span>
+
+        </button>
+
+    </section>
+
+
+    <!-- ========================================
+         EDITOR
+    ========================================= -->
+
+    <section class="editor-card">
+
+
+        <!-- Editor toolbar -->
+
+        <div class="editor-toolbar">
+
+            <span class="editor-label">
+                <h2>TEXT</h2>
+            </span>
+
+            <span
+                id="characterCount"
+                class="character-count"
+            >
+                0 characters
+            </span>
+
+        </div>
+
+
+        <!-- Text area -->
+
+        <textarea
+            id="pageText"
+            placeholder="Write something..."
+            maxlength="100000"
+            oninput="updateCharacterCount()"
+            {% if page.edit_locked and not is_owner %}
+                readonly
+            {% endif %}
+        >{{ page.text }}</textarea>
+
+
+        <!-- Editor footer -->
+
+        <div class="editor-footer">
+
+            <div
+                id="status"
+                class="status-message"
+            ></div>
+
+
+            {% if not page.edit_locked or is_owner %}
+
+                <button
+                    id="saveButton"
+                    onclick="saveText()"
+                    class="primary-button save-button"
+                >
+                    Save changes
+                </button>
+
+            {% else %}
+
+                <span class="readonly-message">
+                    🔒 Editing is locked by the owner
+                </span>
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================================
+         OWNER CONTROLS
+    ========================================= -->
+
+    {% if is_owner %}
 
         <section class="owner-panel">
+
 
             <div class="owner-panel-info">
 
@@ -160,7 +223,10 @@
 
                 <div>
 
-                    <h2>Owner controls</h2>
+                    <h2>
+                        Owner controls
+                    </h2>
+
 
                     {% if page.edit_locked %}
 
@@ -181,6 +247,8 @@
             </div>
 
 
+            <!-- LOCK / UNLOCK BUTTON -->
+
             {% if page.edit_locked %}
 
                 <button
@@ -188,7 +256,16 @@
                     onclick="toggleEditLock(false)"
                     class="secondary-button"
                 >
-                    🔓 Unlock editing
+
+                    <i
+                        id="lockIcon"
+                        class="fi fi-sr-access-control"
+                    ></i>
+
+                    <span id="lockLabel">
+                        Unlock editing
+                    </span>
+
                 </button>
 
             {% else %}
@@ -198,134 +275,197 @@
                     onclick="toggleEditLock(true)"
                     class="danger-button"
                 >
-                    🔒 Lock editing
+
+                    <i
+                        id="lockIcon"
+                        class="fi fi-sr-access-control"
+                    ></i>
+
+                    <span id="lockLabel">
+                        Lock editing
+                    </span>
+
                 </button>
 
             {% endif %}
 
         </section>
 
-        {% endif %}
+    {% endif %}
 
 
-        <footer class="page-footer">
+    <!-- ========================================
+         FOOTER
+    ========================================= -->
 
-            <span>
-                CloneCat
-            </span>
+    <footer class="page-footer">
 
-            <span>
-                Share text. No account.
-            </span>
+        <span>
+            CloneCat
+        </span>
 
-        </footer>
+        <span>
+            Share text. No account.
+        </span>
 
-    </main>
-
-
-    <script>
-
-        updateCharacterCount();
+    </footer>
 
 
-        function updateCharacterCount() {
+</main>
 
-            const textarea =
-                document.getElementById("pageText");
 
-            const counter =
-                document.getElementById("characterCount");
+<!-- ==========================================
+     JAVASCRIPT
+=========================================== -->
 
-            if (!textarea || !counter) {
-                return;
-            }
+<script>
 
-            const count = textarea.value.length;
 
-            counter.textContent =
-                count.toLocaleString() + " characters";
+    /* ========================================
+       CHARACTER COUNT
+    ========================================= */
+
+    updateCharacterCount();
+
+
+    function updateCharacterCount() {
+
+        const textarea =
+            document.getElementById("pageText");
+
+        const counter =
+            document.getElementById("characterCount");
+
+
+        if (!textarea || !counter) {
+            return;
         }
 
 
-        async function copyPageText() {
+        const count =
+            textarea.value.length;
 
-            const textarea =
-                document.getElementById("pageText");
 
-            const button =
-                document.getElementById("copyButton");
+        counter.textContent =
+            count.toLocaleString() + " characters";
+    }
 
-            const icon =
-                document.getElementById("copyIcon");
 
-            const label =
-                document.getElementById("copyLabel");
 
-            try {
+    /* ========================================
+       COPY PAGE TEXT
+    ========================================= */
 
-                await navigator.clipboard.writeText(
-                    textarea.value
+    async function copyPageText() {
+
+        const textarea =
+            document.getElementById("pageText");
+
+        const button =
+            document.getElementById("copyButton");
+
+        const icon =
+            document.getElementById("copyIcon");
+
+        const label =
+            document.getElementById("copyLabel");
+
+
+        try {
+
+            await navigator.clipboard.writeText(
+                textarea.value
+            );
+
+
+            /* Success icon */
+
+            icon.className =
+                "fi fi-rr-check";
+
+            label.textContent =
+                "Copied";
+
+            button.classList.add(
+                "copied"
+            );
+
+
+            /* Return to Copy */
+
+            setTimeout(() => {
+
+                icon.className =
+                    "fi fi-rr-copy-alt";
+
+                label.textContent =
+                    "Copy";
+
+                button.classList.remove(
+                    "copied"
                 );
 
-                icon.textContent = "✓";
-                label.textContent = "Copied";
-
-                button.classList.add("copied");
-
-                setTimeout(() => {
-
-                    icon.textContent = "📋";
-                    label.textContent = "Copy";
-
-                    button.classList.remove("copied");
-
-                }, 1800);
-
-            } catch (error) {
-
-                console.error(
-                    "Copy failed:",
-                    error
-                );
-
-                const status =
-                    document.getElementById("status");
-
-                status.textContent =
-                    "Could not copy text.";
-
-            }
-        }
+            }, 1800);
 
 
-        async function saveText() {
+        } catch (error) {
 
-            const text =
-                document.getElementById("pageText").value;
+            console.error(
+                "Copy failed:",
+                error
+            );
+
 
             const status =
                 document.getElementById("status");
 
-            const button =
-                document.getElementById("saveButton");
+
+            status.textContent =
+                "Could not copy text.";
+        }
+    }
 
 
-            button.disabled = true;
 
-            button.textContent = "Saving...";
+    /* ========================================
+       SAVE TEXT
+    ========================================= */
 
-            status.textContent = "";
+    async function saveText() {
+
+        const textarea =
+            document.getElementById("pageText");
+
+        const status =
+            document.getElementById("status");
+
+        const button =
+            document.getElementById("saveButton");
 
 
-            try {
+        const text =
+            textarea.value;
 
-                const response = await fetch(
+
+        button.disabled = true;
+
+        button.textContent =
+            "Saving...";
+
+        status.textContent = "";
+
+
+        try {
+
+            const response =
+                await fetch(
                     "/api/pages/{{ page.name }}",
                     {
                         method: "PATCH",
 
                         headers: {
-                            "Content-Type": "application/json"
+                            "Content-Type":
+                                "application/json"
                         },
 
                         body: JSON.stringify({
@@ -335,73 +475,136 @@
                 );
 
 
-                const data =
-                    await response.json();
+            const data =
+                await response.json();
 
 
-                if (!response.ok) {
+            /* Error */
 
-                    status.textContent =
-                        data.error || "Could not save.";
-
-                    return;
-                }
-
+            if (!response.ok) {
 
                 status.textContent =
-                    "✓ Saved successfully";
-
-
-                setTimeout(() => {
-
-                    status.textContent = "";
-
-                }, 2500);
-
-
-            } catch (error) {
-
-                console.error(
-                    "Save error:",
-                    error
-                );
-
-                status.textContent =
-                    "Something went wrong.";
-
-
-            } finally {
-
-                button.disabled = false;
+                    data.error ||
+                    "Could not save.";
 
                 button.textContent =
                     "Save changes";
+
+                return;
             }
-        }
-
-        
 
 
-        async function toggleEditLock(lock) {
+            /* Success */
 
-            const status =
-                document.getElementById("status");
+            status.textContent =
+                "✓ Saved successfully";
 
-            const button =
-                document.getElementById("lockButton");
-
-
-            button.disabled = true;
 
             button.textContent =
-                lock
-                    ? "Locking..."
-                    : "Unlocking...";
+                "✓ Saved";
 
 
-            try {
+            /* Green success state */
 
-                const response = await fetch(
+            button.style.backgroundColor =
+                "#16a34a";
+
+            button.style.borderColor =
+                "#16a34a";
+
+            button.style.color =
+                "#ffffff";
+
+
+            /* Return to normal */
+
+            setTimeout(() => {
+
+                status.textContent = "";
+
+                button.textContent =
+                    "Save changes";
+
+                button.style.backgroundColor =
+                    "";
+
+                button.style.borderColor =
+                    "";
+
+                button.style.color =
+                    "";
+
+            }, 1500);
+
+
+        } catch (error) {
+
+            console.error(
+                "Save error:",
+                error
+            );
+
+
+            status.textContent =
+                "Something went wrong.";
+
+
+            button.textContent =
+                "Save changes";
+
+
+        } finally {
+
+            button.disabled = false;
+
+        }
+    }
+
+
+
+    /* ========================================
+       LOCK / UNLOCK EDITING
+    ========================================= */
+
+    async function toggleEditLock(lock) {
+
+        const status =
+            document.getElementById("status");
+
+        const button =
+            document.getElementById("lockButton");
+
+        const icon =
+            document.getElementById("lockIcon");
+
+        const label =
+            document.getElementById("lockLabel");
+
+
+        button.disabled = true;
+
+        status.textContent = "";
+
+
+        /*
+         * Keep access-control icon while
+         * request is processing
+         */
+
+        icon.className =
+            "fi fi-sr-access-control";
+
+
+        label.textContent =
+            lock
+                ? "Locking..."
+                : "Unlocking...";
+
+
+        try {
+
+            const response =
+                await fetch(
                     "/api/pages/{{ page.name }}/lock",
                     {
                         method: "PATCH",
@@ -411,7 +614,8 @@
                                 "application/json"
                         },
 
-                        credentials: "same-origin",
+                        credentials:
+                            "same-origin",
 
                         body: JSON.stringify({
                             edit_locked: lock
@@ -420,49 +624,108 @@
                 );
 
 
-                const data =
-                    await response.json();
+            const data =
+                await response.json();
 
 
-                if (!response.ok) {
+            /* Error */
 
-                    status.textContent =
-                        data.error ||
-                        "Could not update lock status.";
-
-                    return;
-                }
-
+            if (!response.ok) {
 
                 status.textContent =
-                    "✓ Updated successfully";
+                    data.error ||
+                    "Could not update lock status.";
 
 
-                setTimeout(() => {
-
-                    window.location.reload();
-
-                }, 500);
+                icon.className =
+                    "fi fi-sr-access-control";
 
 
-            } catch (error) {
-
-                console.error(
-                    "Lock error:",
-                    error
-                );
-
-                status.textContent =
-                    "Something went wrong.";
+                label.textContent =
+                    lock
+                        ? "Lock editing"
+                        : "Unlock editing";
 
 
-            } finally {
-
-                button.disabled = false;
+                return;
             }
-        }
 
-    </script>
+
+            /* Success */
+
+            status.textContent =
+                lock
+                    ? "✓ Page locked"
+                    : "✓ Page unlocked";
+
+
+            /* Change icon to check */
+
+            icon.className =
+                "fi fi-rr-check";
+
+
+            label.textContent =
+                lock
+                    ? "Locked"
+                    : "Unlocked";
+
+
+            /* Green success state */
+
+            button.style.backgroundColor =
+                "#16a34a";
+
+            button.style.borderColor =
+                "#16a34a";
+
+            button.style.color =
+                "#ffffff";
+
+
+            /*
+             * Reload because the server/Jinja
+             * needs to render the new state.
+             */
+
+            setTimeout(() => {
+
+                window.location.reload();
+
+            }, 900);
+
+
+        } catch (error) {
+
+            console.error(
+                "Lock error:",
+                error
+            );
+
+
+            status.textContent =
+                "Something went wrong.";
+
+
+            icon.className =
+                "fi fi-sr-access-control";
+
+
+            label.textContent =
+                lock
+                    ? "Lock editing"
+                    : "Unlock editing";
+
+
+        } finally {
+
+            button.disabled = false;
+
+        }
+    }
+
+
+</script>
 
 </body>
 

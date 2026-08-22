@@ -19,10 +19,16 @@
 
         <!-- Navigation -->
         <nav class="navbar">
-
             <a href="/" class="brand">
-                <span class="brand-icon">🐱</span>
-                <span>CloneCat</span>
+                <img
+    src="{{ url_for('static', filename='images/clonecat_logo.png') }}"
+    alt="CloneCat"
+    class="brand-logo-icon"
+>
+            
+                <span class="brand-name">
+                    <span class="brand-clone">Clone</span><span class="brand-cat">Cat</span>
+                </span>
             </a>
 
             <div class="nav-links">
