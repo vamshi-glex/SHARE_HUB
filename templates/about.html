@@ -3,99 +3,203 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>About CloneCat</title>
+
 
     <link
         rel="stylesheet"
         href="{{ url_for('static', filename='style.css') }}"
     >
+
+
     <link
-    rel="icon"
-    type="image/png"
-    sizes="96x96"
-    href="{{ url_for('static', filename='images/favicon-96x96.png') }}"
->
+        rel="icon"
+        type="image/png"
+        sizes="96x96"
+        href="{{ url_for('static', filename='images/favicon-96x96.png') }}"
+    >
+
 </head>
+
 
 <body>
 
-    <main class="landing">
+<main class="landing">
 
-        <!-- Navigation -->
-        <nav class="navbar">
-            <a href="/" class="brand">
-                <img
-    src="{{ url_for('static', filename='images/clonecat_logo.png') }}"
-    alt="CloneCat"
-    class="brand-logo-icon"
->
-            
-                <span class="brand-name">
-                    <span class="brand-clone">Clone</span><span class="brand-cat">Cat</span>
-                </span>
+
+    <!-- ========================================
+         NAVBAR
+    ========================================= -->
+
+    <nav class="navbar">
+
+        <a href="/" class="brand">
+
+            <img
+                src="{{ url_for('static', filename='images/clonecat_logo.png') }}"
+                alt="CloneCat"
+                class="brand-logo-icon"
+            >
+
+            <span class="brand-name">
+                <span class="brand-clone">Clone</span><span class="brand-cat">Cat</span>
+            </span>
+
+        </a>
+
+
+        <div class="nav-links">
+
+            <a href="/">
+                Home
             </a>
 
-            <div class="nav-links">
-                <a href="/">Home</a>
-                <a href="/about">About</a>
-                <a href="/features">Features</a>
-            </div>
+            <a href="/about">
+                About
+            </a>
 
-        </nav>
+            <a href="/features">
+                Features
+            </a>
+
+        </div>
 
 
-        <!-- About -->
-        <section class="info-page">
+        <button
+            class="menu-button"
+            id="menuButton"
+            onclick="toggleMobileMenu()"
+            aria-label="Open navigation menu"
+        >
 
-            <div class="hero-badge">
-                ABOUT CLONECAT
-            </div>
+            <span></span>
+            <span></span>
+            <span></span>
 
-            <h1>
-                Share text.<br>
-                <span>Without the hassle.</span>
-            </h1>
+        </button>
 
-            <p class="info-description">
-                CloneCat is a simple text-sharing platform built
-                for people who want to share information quickly
-                without creating an account.
+    </nav>
+
+
+    <!-- ========================================
+         MOBILE MENU
+    ========================================= -->
+
+    <div
+        class="mobile-menu"
+        id="mobileMenu"
+    >
+
+        <a href="/">
+            <span>⌂</span>
+            Home
+        </a>
+
+        <a href="/about">
+            <span>○</span>
+            About
+        </a>
+
+        <a href="/features">
+            <span>☆</span>
+            Features
+        </a>
+
+    </div>
+
+
+    <!-- ========================================
+         ABOUT
+    ========================================= -->
+
+    <section class="info-page">
+
+        <div class="hero-badge">
+            ABOUT CLONECAT
+        </div>
+
+
+        <h1>
+            Share text.<br>
+            <span>Without the hassle.</span>
+        </h1>
+
+
+        <p class="info-description">
+
+            CloneCat is a simple text-sharing platform built
+            for people who want to share information quickly
+            without creating an account.
+
+        </p>
+
+
+        <div class="info-card">
+
+            <h2>
+                How CloneCat works
+            </h2>
+
+
+            <p>
+                Choose a page name, open the page, write your
+                content, and share the URL with anyone.
             </p>
 
 
-            <div class="info-card">
-
-                <h2>How CloneCat works</h2>
-
-                <p>
-                    Choose a page name, open the page, write your
-                    content, and share the URL with anyone.
-                </p>
-
-                <p>
-                    Visitors can view and edit the content when
-                    editing is allowed. The page owner can lock
-                    editing whenever needed.
-                </p>
-
-                <p>
-                    No registration. No login. Just create a page
-                    and start sharing.
-                </p>
-
-            </div>
-
-        </section>
+            <p>
+                Visitors can view and edit the content when
+                editing is allowed. The page owner can lock
+                editing whenever needed.
+            </p>
 
 
-        <!-- Footer -->
-        <footer class="landing-footer">
-            CloneCat · Share text without the hassle.
-        </footer>
+            <p>
+                No registration. No login. Just create a page
+                and start sharing.
+            </p>
 
-    </main>
+        </div>
+
+    </section>
+
+
+    <!-- ========================================
+         FOOTER
+    ========================================= -->
+
+    <footer class="landing-footer">
+        CloneCat · Share text without the hassle.
+    </footer>
+
+
+</main>
+
+
+<script>
+
+function toggleMobileMenu() {
+
+    const menu =
+        document.getElementById("mobileMenu");
+
+    const button =
+        document.getElementById("menuButton");
+
+
+    menu.classList.toggle("open");
+
+    button.classList.toggle("open");
+}
+
+</script>
+
 
 </body>
 

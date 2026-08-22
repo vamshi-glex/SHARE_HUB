@@ -3,7 +3,11 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>CloneCat</title>
 
@@ -11,118 +15,223 @@
         rel="stylesheet"
         href="{{ url_for('static', filename='style.css') }}"
     >
+
     <link
-    rel="icon"
-    type="image/png"
-    sizes="96x96"
-    href="{{ url_for('static', filename='images/favicon-96x96.png') }}"
->
-    
-     
-     
-    
-     
+        rel="icon"
+        type="image/png"
+        sizes="96x96"
+        href="{{ url_for('static', filename='images/favicon-96x96.png') }}"
+    >
 </head>
+
 
 <body>
 
-    <main class="landing">
+<main class="landing">
 
-        <!-- Navigation -->
-        <nav class="navbar">
 
-            <a href="/" class="brand">
-                <img
-    src="{{ url_for('static', filename='images/clonecat_logo.png') }}"
-    alt="CloneCat"
-    class="brand-logo-icon"
->
-            
-                <span class="brand-name">
-                    <span class="brand-clone">Clone</span><span class="brand-cat">Cat</span>
-                </span>
+    <!-- ========================================
+         NAVBAR
+    ========================================= -->
+
+    <nav class="navbar">
+
+        <a href="/" class="brand">
+
+            <img
+                src="{{ url_for('static', filename='images/clonecat_logo.png') }}"
+                alt="CloneCat"
+                class="brand-logo-icon"
+            >
+
+            <span class="brand-name">
+                <span class="brand-clone">Clone</span><span class="brand-cat">Cat</span>
+            </span>
+
+        </a>
+
+
+        <!-- Desktop navigation -->
+
+        <div class="nav-links">
+
+            <a href="/">
+                Home
             </a>
 
-            <div class="nav-links">
-                <a href="/">Home</a>
-                <a href="/about">About</a>
-                <a href="/features">Features</a>
+            <a href="/about">
+                About
+            </a>
+
+            <a href="/features">
+                Features
+            </a>
+
+        </div>
+
+
+        <!-- Mobile hamburger -->
+
+        <button
+            class="menu-button"
+            id="menuButton"
+            onclick="toggleMobileMenu()"
+            aria-label="Open navigation menu"
+        >
+
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </button>
+
+    </nav>
+
+
+    <!-- ========================================
+         MOBILE MENU
+    ========================================= -->
+
+    <div
+        class="mobile-menu"
+        id="mobileMenu"
+    >
+
+        <a href="/">
+            <span>⌂</span>
+            Home
+        </a>
+
+        <a href="/about">
+            <span>○</span>
+            About
+        </a>
+
+        <a href="/features">
+            <span>☆</span>
+            Features
+        </a>
+
+    </div>
+
+
+    <!-- ========================================
+         HERO
+    ========================================= -->
+
+    <section class="hero">
+
+        <div class="hero-badge">
+            SIMPLE · FAST · NO ACCOUNT
+        </div>
+
+
+        <h1>
+            Share text.<br>
+            <span>No account.</span>
+        </h1>
+
+
+        <p class="hero-description">
+            Create a page, write anything you want,
+            and share the link with anyone.
+        </p>
+
+
+        <!-- ====================================
+             CREATE PAGE CARD
+        ===================================== -->
+
+        <div class="create-card">
+
+            <label for="pageName">
+                Create or open a page
+            </label>
+
+
+            <div class="page-input-group">
+
+                <span class="url-prefix">
+                    /
+                </span>
+
+
+                <input
+                    type="text"
+                    id="pageName"
+                    placeholder="page-name"
+                    autocomplete="off"
+                    maxlength="50"
+                    onkeydown="if(event.key === 'Enter') openPage()"
+                >
+
+
+                <button
+                    onclick="openPage()"
+                    class="primary-button"
+                >
+                    Create
+                    <span>→</span>
+                </button>
+
             </div>
 
-        </nav>
 
-
-        <!-- Hero -->
-        <section class="hero">
-
-            <div class="hero-badge">
-                SIMPLE · FAST · NO ACCOUNT
-            </div>
-
-            <h1>
-                Share text.<br>
-                <span>No account.</span>
-            </h1>
-
-            <p class="hero-description">
-                Create a page, write anything you want,
-                and share the link with anyone.
+            <p class="input-hint">
+                Use letters, numbers, hyphens or underscores.
             </p>
 
 
-            <!-- Create / Open Page -->
-            <div class="create-card">
+            <p class="expiry-info">
 
-                <label for="pageName">
-                    Create or open a page
-                </label>
+                <span class="expiry-icon">
+                    ⏱
+                </span>
 
-                <div class="page-input-group">
+                Available for 2 days
 
-                    <span class="url-prefix">/</span>
+            </p>
 
-                    <input
-                        type="text"
-                        id="pageName"
-                        placeholder="page-name"
-                        autocomplete="off"
-                        maxlength="50"
-                        onkeydown="if(event.key === 'Enter') openPage()"
-                    >
+        </div>
 
-                    <button
-                        onclick="openPage()"
-                        class="primary-button"
-                    >
-                        Create
-                        <span>→</span>
-                    </button>
-
-                </div>
-
-                <p class="input-hint">
-                    Use letters, numbers, hyphens or underscores.
-                </p>
-
-                <p class="expiry-info">
-                    <span class="expiry-icon">⏱</span>
-                    Available for 2 days
-                </p>
-
-            </div>
-
-        </section>
+    </section>
 
 
-        <!-- Footer -->
-        <footer class="landing-footer">
-            CloneCat · Share text without the hassle.
-        </footer>
+    <!-- ========================================
+         FOOTER
+    ========================================= -->
 
-    </main>
+    <footer class="landing-footer">
+        CloneCat · Share text without the hassle.
+    </footer>
 
 
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</main>
+
+
+<script
+    src="{{ url_for('static', filename='script.js') }}"
+></script>
+
+
+<script>
+
+function toggleMobileMenu() {
+
+    const menu =
+        document.getElementById("mobileMenu");
+
+    const button =
+        document.getElementById("menuButton");
+
+
+    menu.classList.toggle("open");
+
+    button.classList.toggle("open");
+}
+
+</script>
+
 
 </body>
 
