@@ -3,7 +3,8 @@ from flask import (
     render_template,
     request,
     jsonify,
-    make_response
+    make_response,
+    send_from_directory
 )
 
 from sqlalchemy.exc import SQLAlchemyError
@@ -401,3 +402,19 @@ def update_edit_lock(name):
         "message": "Edit lock updated",
         "edit_locked": page.edit_locked
     }), 200
+
+@pages_bp.route("/robots.txt")
+def robots_txt():
+    return send_from_directory(
+        "static",
+        "robots.txt",
+        mimetype="text/plain"
+    )
+
+@pages_bp.route("/sitemap.xml")
+def sitemap_xml():
+    return send_from_directory(
+        "static",
+        "sitemap.xml",
+        mimetype="application/xml"
+    )
