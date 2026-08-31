@@ -71,11 +71,11 @@
 
     <!-- Favicon -->
     <link
-        rel="icon"
-        type="image/png"
-        sizes="96x96"
-        href="{{ url_for('static', filename='images/favicon-96x96.png') }}"
-    >
+    rel="icon"
+    href="/favicon.png"
+    type="image/png"
+    sizes="96x96"
+>
 
 </head>
 
@@ -213,7 +213,7 @@
                 <input
                     type="text"
                     id="pageName"
-                    placeholder="page-name"
+                    placeholder="Enter-page-name"
                     autocomplete="off"
                     maxlength="50"
                     onkeydown="if(event.key === 'Enter') openPage()"
