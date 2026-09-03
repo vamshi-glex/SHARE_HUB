@@ -419,8 +419,16 @@ def sitemap_xml():
         mimetype="application/xml"
     )
 
-@pages_bp.route("/favicon.png")
+@pages_bp.route("/favicon-96x96.png")
 def favicon():
+    return send_from_directory(
+        "static/images",
+        "favicon-96x96.png",
+        mimetype="image/png"
+    )
+
+@pages_bp.route("/favicon.ico")
+def favicon_ico():
     return send_from_directory(
         "static/images",
         "favicon-96x96.png",
